@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link
+         href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+         rel="stylesheet"
+         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+         crossorigin="anonymous"
+      />
+      <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+      />
+      <link rel="stylesheet" href="style.css" />
+      <link rel="stylesheet" href="style_login.css" />
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+      <script src="navbar.js"></script>
+      <title>OPG Berlančić</title>
+   </head>
+   <body>
+   <div class="container">
+      <div class="content">
+         <br>
+         <h1>Dobrodošli, admine!</h1>
+      </div>
+   </div>
+   <div class="container my-5">
+      <h2>Popis proizvoda</h2>
+      <a class="btn btn-primary" href="create.html" role="button">Novi proizvod</a>
+      <br>
+      <table class="table" id="product-table">
+         
+      </table>
+   </div>
+   <div class="container my-5">
+      <h2>Popis recenzija</h2>
+      <br>
+      <table class="table" id="review-table">
+         
+      </table>
+   </div>
+   <div class="container my-5">
+      <h2>Popis korisnika</h2>
+      <br>
+      <table class="table" id="user-table">
+         
+      </table>
+   </div>
+   <br>
+   <footer class="p-3 bg-dark text-white text-center position-relative">
+      <div class="container">
+        <p class="lead">Copyright &copy; 2023 OPG Berlančić</p>
+        <a href="#" class="position-absolute bottom-0 end-0 p-3">
+          <i class="bi bi-arrow-up-circle h1"></i>
+        </a>
+      </div>
+   </footer>
+   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+   <script>
+      $(document).ready(function(){
+         // Function to redirect user to login page
+         function redirectToLogin() {
+            window.location.href = 'login_form.html';
+         }
+   
+         // AJAX request to check if user is logged in as admin
+         $.ajax({
+            url: 'check_admin.php',
+            success: function(data) {
+               // If user is not logged in as admin, redirect to login page
+               if (data !== 'admin') {
+                  redirectToLogin();
+               } else {
+                  // If user is logged in as admin, load data
+                  loadAdminData();
+               }
+            },
+            error: function(xhr, status, error) {
+               // Handle error if AJAX request fails
+               console.error(xhr.responseText);
+               // Redirect to login page in case of error
+               redirectToLogin();
+            }
+         });
+   
+         // Function to load admin data once logged in as admin
+         function loadAdminData() {
+            // AJAX request to load product data
+            $.ajax({
+               url: 'products_logic.php',
+               success: function(data) {
+                  $('#product-table').html(data);
+               },
+               error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+   
+            // AJAX request to load review data
+            $.ajax({
+               url: 'reviews_logic.php',
+               success: function(data) {
+                  $('#review-table').html(data);
+               },
+               error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+   
+            // AJAX request to load user data
+            $.ajax({
+               url: 'users_logic.php',
+               success: function(data) {
+                  $('#user-table').html(data);
+               },
+               error: function(xhr, status, error) {
+                  console.error(xhr.responseText);
+               }
+            });
+         }
+      });
+   </script>
+   
+
+</body>
+</html>
